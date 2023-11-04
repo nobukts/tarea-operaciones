@@ -78,11 +78,10 @@ def solucionInicial(n):
     return solucion
 
 def swap(n, f_size, f_weight, sol):
-    distancia_final = total_distance(n, f_size, f_weight, sol)
-    print(f"Solucion base: ", sol)
-    print(f"Distancia total base:", distancia_final)
-    
-    sol_aux = sol
+    dist1 = total_distance(n, f_size, f_weight, sol)
+    sol_aux = sol[:]
+    print(sol)
+
     for i in range(0,10):
         j1,j2 = random.sample(sol_aux, 2)
 
@@ -92,16 +91,16 @@ def swap(n, f_size, f_weight, sol):
 
         pos_dist = total_distance(n, f_size, f_weight, sol_aux)
     
-        if pos_dist < distancia_final:
-            print(f"{i}    ",sol_aux)
-            print(pos_dist)
+        if dist1 > pos_dist:
+            print(i)
             sol = sol_aux
-
+            dist1 = pos_dist
+        
     return sol
     
 
 #Ejemplo de uso:
-file_name = "sko100.txt"
+file_name = "S8.txt"
 n, f_size, f_weight = read_srflp(file_name)
 #print_instance(n, f_size, f_weight)
 dist_final = 0
