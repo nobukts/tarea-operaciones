@@ -1,5 +1,5 @@
-import os
 import random
+import math as m
 
 def read_srflp(file_name):
     """
@@ -78,41 +78,38 @@ def solucionInicial(n):
     return solucion
 
 def swap(n, f_size, f_weight, sol):
-    dist1 = total_distance(n, f_size, f_weight, sol)
-    sol_aux = sol[:]
-    print(sol)
-    print("Base:", dist1)
+    dist_ori = total_distance(n, f_size, f_weight, sol)
+    mod_arr = sol.copy()
+    print(f"Solución Base: {sol}\nDistancia base:{dist_ori}") 
 
     for i in range(0,10):
-        j1,j2 = random.sample(sol_aux, 2)
+        j1,j2 = random.sample(mod_arr, 2)
 
-        aux = sol_aux[j1]
-        sol_aux[j1] = sol_aux[j2]
-        sol_aux[j2] = aux
+        aux = mod_arr[j1]
+        mod_arr[j1] = mod_arr[j2]
+        mod_arr[j2] = aux
 
-        pos_dist = total_distance(n, f_size, f_weight, sol_aux)
+        pos_dist = total_distance(n, f_size, f_weight, mod_arr)
     
-        if dist1 > pos_dist:
-            print(i,":", pos_dist)
-            sol = sol_aux
-            dist1 = pos_dist
-        elif i == 4:
-            print("Caso especial:", pos_dist)
-            sol = sol_aux
-            dist1 = pos_dist
+        if dist_ori > pos_dist:
+            print(f"Solución {i}: {sol}\nNueva distancia:{dist_ori}") 
+            sol = mod_arr.copy()
+            dist_ori = pos_dist
     return sol
     
 
-#Ejemplo de uso:
+#Elección de archivo
 file_name = "S8.txt"
 n, f_size, f_weight = read_srflp(file_name)
-#print_instance(n, f_size, f_weight)
-dist_final = 0
-solucion = solucionInicial(n)  # Ejemplo de solución
-solucion = swap(n, f_size, f_weight, solucion)
-# 56 
+
+print_instance(n, f_size, f_weight)
+print("\n===========================\n")
+solucion = solucionInicial(n)  # Solución generada de forma aleatoria uniforme
+solucion = swap(n, f_size, f_weight, solucion) #Método swap para encontrar una mejor solución
+
+# Óptimo para 56 tiendas 
 #solucion = [40, 14, 20, 24, 53, 0, 15, 3, 45, 1, 7, 36, 47, 33, 38, 25, 26, 16, 44, 5, 19, 11, 42, 30, 46, 52, 49, 27, 23, 54, 13, 6, 35, 9, 10, 28, 50, 4, 43, 55, 12, 17, 51, 8, 39, 22, 29, 41, 48, 32, 18, 21, 31, 2, 37, 34]
-# 100
+# Óptimo para 100 tiendas 
 #solucion = [48, 41, 38, 78, 70, 24, 31, 92, 96, 17, 4, 93, 51, 67, 7, 97, 82, 8, 15, 87, 21, 32, 42, 20, 26, 74, 79, 23, 59, 66, 85, 27, 30, 73, 18, 88, 53, 14, 0, 55, 95, 64, 3, 90, 84, 54, 12, 10, 77, 62, 56, 61, 36, 76, 58, 80, 60, 49, 91, 47, 89, 99, 37, 45, 25, 81, 68, 52, 34, 71, 65, 69, 35, 50, 9, 39, 19, 29, 46, 72, 13, 40, 86, 33, 63, 94, 43, 28, 22, 11, 16, 98, 1, 75, 57, 44, 83, 5, 2, 6]
 
 print(f"\nSolucion final: ", solucion)
