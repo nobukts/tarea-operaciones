@@ -81,6 +81,7 @@ def swap(n, f_size, f_weight, sol):
     dist1 = total_distance(n, f_size, f_weight, sol)
     sol_aux = sol[:]
     print(sol)
+    print("Base:", dist1)
 
     for i in range(0,10):
         j1,j2 = random.sample(sol_aux, 2)
@@ -92,10 +93,13 @@ def swap(n, f_size, f_weight, sol):
         pos_dist = total_distance(n, f_size, f_weight, sol_aux)
     
         if dist1 > pos_dist:
-            print(i)
+            print(i,":", pos_dist)
             sol = sol_aux
             dist1 = pos_dist
-        
+        elif i == 4:
+            print("Caso especial:", pos_dist)
+            sol = sol_aux
+            dist1 = pos_dist
     return sol
     
 
