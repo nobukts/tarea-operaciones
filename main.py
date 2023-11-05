@@ -1,4 +1,4 @@
-import random
+import random as r
 import math as m
 
 def read_srflp(file_name):
@@ -74,27 +74,38 @@ def solucionInicial(n):
     arreglo = []
     for i in range(0,n):
         arreglo.append(i)
-    solucion = random.sample(arreglo, n)
+    solucion = r.sample(arreglo, n)
     return solucion
 
 def swap(n, f_size, f_weight, sol):
     dist_ori = total_distance(n, f_size, f_weight, sol)
     mod_arr = sol.copy()
-    print(f"Solución Base: {sol}\nDistancia base:{dist_ori}") 
+    print(f"Solución Base: {sol}\nDistancia base:{dist_ori}\n") 
 
-    for i in range(0,10):
-        j1,j2 = random.sample(mod_arr, 2)
+    t_i = 20
+    t_m = 0.2
+    alpha = 0.4
+
+    while(t_i > t_m):
+        j1,j2 = r.sample(mod_arr, 2)
 
         aux = mod_arr[j1]
         mod_arr[j1] = mod_arr[j2]
         mod_arr[j2] = aux
 
         pos_dist = total_distance(n, f_size, f_weight, mod_arr)
-    
-        if dist_ori > pos_dist:
-            print(f"Solución {i}: {sol}\nNueva distancia:{dist_ori}") 
+        dif_dist = pos_dist - dist_ori
+
+        if dif_dist < 0:
             sol = mod_arr.copy()
             dist_ori = pos_dist
+            print(f"Solución Criterio 1: {sol}\nDistancia nueva:{dist_ori}") 
+        elif m.exp(-(dif_dist)/(t_i)) > r.random():
+            sol = mod_arr.copy()
+            dist_ori = pos_dist
+            print(f"Solución Criterio 2: {sol}\nDistancia nueva:{dist_ori}") 
+        t_i *= alpha
+        
     return sol
     
 
