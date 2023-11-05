@@ -65,12 +65,17 @@ def total_distance(n, f_size, f_weight, sol):
         middle_distance = 0.0
         for j in range(i + 1, n):
             p2 = sol[j]
-            total += ( (f_size[p1] / 2 + middle_distance + f_size[p2] / 2) * (f_weight[i][j]) )
+            total += ( (f_size[p1] / 2 + middle_distance + f_size[p2] / 2) * (f_weight[p1][p2]) )
             middle_distance += f_size[p2]
 
     return total
 
 def solucionInicial(n):
+    """
+    Función para obtener la solución inicial aleatorizada.
+    n: Número de instalaciones.
+    return: Arreglo con el orden de las instalaciones aleatorizadas.
+    """
     arreglo = []
     for i in range(0,n):
         arreglo.append(i)
@@ -78,13 +83,21 @@ def solucionInicial(n):
     return solucion
 
 def swap(n, f_size, f_weight, sol):
+    """
+    Función para realizar el Simulated Annealing.
+    n: Número de instalaciones.
+    f_size: Tamaños de las instalaciones.
+    f_weight: Matriz de pesos.
+    sol: Arreglo con el orden de las instalaciones.
+    return: Retorna un arreglo con el orden de los puestos según los criterios.
+    """
     dist_ori = total_distance(n, f_size, f_weight, sol)
     mod_arr = sol.copy()
     print(f"Solución Base: {sol}\nDistancia base: {dist_ori}\n") 
 
     t_i = round(dist_ori/2)
     t_m = 0.2
-    alpha = 0.4
+    alpha = 0.98
 
     while(t_i > t_m):
         j1,j2 = r.sample(mod_arr, 2)
