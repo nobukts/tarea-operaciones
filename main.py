@@ -1,5 +1,6 @@
 import random as r
 import math as m
+from colorama import Fore
 
 def read_srflp(file_name):
     """
@@ -83,8 +84,14 @@ def solucionInicial(n):
     return solucion
 
 def swap(mod_arr):
+    """
+    Función para realizar cambiar los valores de dos posiciones en un arreglo.
+    mod_arr: Arreglo con el orden de las instalaciones.
+    """
+    # Utilizando sample, se seleccionan aleatoriamente dos posiciones al azar del arreglo
     j1,j2 = r.sample(mod_arr, 2)
 
+    # Utilizando una variable auxiliar, se intercambian ambas posiciones en el arreglo
     aux = mod_arr[j1]
     mod_arr[j1] = mod_arr[j2]
     mod_arr[j2] = aux
@@ -96,49 +103,55 @@ def simulated_annealing(n, f_size, f_weight, sol):
     f_size: Tamaños de las instalaciones.
     f_weight: Matriz de pesos.
     sol: Arreglo con el orden de las instalaciones.
-    return: Retorna un arreglo con el orden de los puestos según los criterios.
+    return: Retorna la mejor solución encontrada en forma de arreglo con el orden de los puestos según los criterios de aceptación.
     """
+    # Se calcula la distancia de la solución inicial
     dist_ori = total_distance(n, f_size, f_weight, sol)
+    # Se copia en otro arreglo la solución inicial
     mod_arr = sol.copy()
-    print(f"Solución Base: {sol}\nDistancia base: {dist_ori}\n") 
 
-    t_i = round(dist_ori/2)
-    t_m = 0.2
-    alpha = 0.98
-
+    # Párametros
+    t_i = 1000 # Temperatura actual
+    t_m = 0.1 # Temperatura mínima
+    alpha = 0.98 # Párametro alfa
+    # Mientras la temperatura actual no sea menor a la temperatura mínima, se realizaran iteraciones
     while(t_i > t_m):
+        # Se utiliza el operador SWAP para modificar el orden de los puestos
         swap(mod_arr)
-
+        # Se calcula la distancia de la nueva solución
         pos_dist = total_distance(n, f_size, f_weight, mod_arr)
+        # Se calcula la diferencia de las distancias
         dif_dist = pos_dist - dist_ori
 
+        # Si la distancia es menor, significa que la solución nueva es mejor que la actual
         if dif_dist < 0:
+            # Se copia el valor en el arreglo que se entregara al final, en conjunto de la distancia calculada.
             sol = mod_arr.copy()
             dist_ori = pos_dist
-            print(f"Solución Criterio 1: {dist_ori}") 
+            print(Fore.GREEN + f"Solución Criterio A: {dist_ori}") 
+        # Si la distancia es mayor, se evalua utilizando el criterio de metropolis si se cambia o no, para explorar más en el espacio de búsqueda
         elif m.exp(-(dif_dist)/(t_i)) > r.random():
+            # Se copia el valor en el arreglo que se entregara al final, en conjunto de la distancia calculada.
             sol = mod_arr.copy()
             dist_ori = pos_dist
-            print(f"Solución Criterio 2: {dist_ori}") 
+            print(Fore.RED + f"Solución Criterio B: {dist_ori}") 
+        # Se disminuye la temperatura actual utilizando el parámetro alfa
         t_i *= alpha
-        
     return sol
     
-
-#Elección de archivo
+## FUNCIÓN PRINCIPAL
+# Seleccionar archivo
 file_name = "sko56.txt"
+# Lectura del archivo
 n, f_size, f_weight = read_srflp(file_name)
-
+# Mostrar por pantalla los valores de la instancia
 print_instance(n, f_size, f_weight)
 print("\n===========================\n")
-solucion = solucionInicial(n)  # Solución generada de forma aleatoria uniforme
-
-# Óptimo para 56 tiendas 
-#solucion = [40, 14, 20, 24, 53, 0, 15, 3, 45, 1, 7, 36, 47, 33, 38, 25, 26, 16, 44, 5, 19, 11, 42, 30, 46, 52, 49, 27, 23, 54, 13, 6, 35, 9, 10, 28, 50, 4, 43, 55, 12, 17, 51, 8, 39, 22, 29, 41, 48, 32, 18, 21, 31, 2, 37, 34]
-# Óptimo para 100 tiendas 
-#solucion = [48, 41, 38, 78, 70, 24, 31, 92, 96, 17, 4, 93, 51, 67, 7, 97, 82, 8, 15, 87, 21, 32, 42, 20, 26, 74, 79, 23, 59, 66, 85, 27, 30, 73, 18, 88, 53, 14, 0, 55, 95, 64, 3, 90, 84, 54, 12, 10, 77, 62, 56, 61, 36, 76, 58, 80, 60, 49, 91, 47, 89, 99, 37, 45, 25, 81, 68, 52, 34, 71, 65, 69, 35, 50, 9, 39, 19, 29, 46, 72, 13, 40, 86, 33, 63, 94, 43, 28, 22, 11, 16, 98, 1, 75, 57, 44, 83, 5, 2, 6]
-
-solucion = simulated_annealing(n, f_size, f_weight, solucion) #Método swap para encontrar una mejor solución
-
-print(f"\nSolucion final: ", solucion)
+# Solución generada de forma aleatoria uniforme
+solucion = solucionInicial(n)  
+# Se llama a la función para realizar el Simulated Annealing
+solucion = simulated_annealing(n, f_size, f_weight, solucion) 
+# Se muestra la mejor solución encontrada
+print(Fore.RESET +f"\nSolucion final: ", solucion)
+# Se muestra el resultado de la función objetivo
 print(f"Distancia total final:", total_distance(n, f_size, f_weight, solucion))
