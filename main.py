@@ -82,7 +82,14 @@ def solucionInicial(n):
     solucion = r.sample(arreglo, n)
     return solucion
 
-def swap(n, f_size, f_weight, sol):
+def swap(mod_arr):
+    j1,j2 = r.sample(mod_arr, 2)
+
+    aux = mod_arr[j1]
+    mod_arr[j1] = mod_arr[j2]
+    mod_arr[j2] = aux
+
+def simulated_annealing(n, f_size, f_weight, sol):
     """
     Función para realizar el Simulated Annealing.
     n: Número de instalaciones.
@@ -100,11 +107,7 @@ def swap(n, f_size, f_weight, sol):
     alpha = 0.98
 
     while(t_i > t_m):
-        j1,j2 = r.sample(mod_arr, 2)
-
-        aux = mod_arr[j1]
-        mod_arr[j1] = mod_arr[j2]
-        mod_arr[j2] = aux
+        swap(mod_arr)
 
         pos_dist = total_distance(n, f_size, f_weight, mod_arr)
         dif_dist = pos_dist - dist_ori
@@ -135,7 +138,7 @@ solucion = solucionInicial(n)  # Solución generada de forma aleatoria uniforme
 # Óptimo para 100 tiendas 
 #solucion = [48, 41, 38, 78, 70, 24, 31, 92, 96, 17, 4, 93, 51, 67, 7, 97, 82, 8, 15, 87, 21, 32, 42, 20, 26, 74, 79, 23, 59, 66, 85, 27, 30, 73, 18, 88, 53, 14, 0, 55, 95, 64, 3, 90, 84, 54, 12, 10, 77, 62, 56, 61, 36, 76, 58, 80, 60, 49, 91, 47, 89, 99, 37, 45, 25, 81, 68, 52, 34, 71, 65, 69, 35, 50, 9, 39, 19, 29, 46, 72, 13, 40, 86, 33, 63, 94, 43, 28, 22, 11, 16, 98, 1, 75, 57, 44, 83, 5, 2, 6]
 
-solucion = swap(n, f_size, f_weight, solucion) #Método swap para encontrar una mejor solución
+solucion = simulated_annealing(n, f_size, f_weight, solucion) #Método swap para encontrar una mejor solución
 
 print(f"\nSolucion final: ", solucion)
 print(f"Distancia total final:", total_distance(n, f_size, f_weight, solucion))
