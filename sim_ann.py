@@ -1,6 +1,5 @@
 import random as r
 import math as m
-from colorama import Fore
 
 def read_srflp(file_name):
     """
@@ -128,13 +127,13 @@ def simulated_annealing(n, f_size, f_weight, sol):
             # Se copia el valor en el arreglo que se entregara al final, en conjunto de la distancia calculada.
             sol = mod_arr.copy()
             dist_ori = pos_dist
-            print(Fore.GREEN + f"Solución Criterio A: {dist_ori}") 
+            print(f"Solución Criterio A: {dist_ori}") 
         # Si la distancia es mayor, se evalua utilizando el criterio de metropolis si se cambia o no, para explorar más en el espacio de búsqueda
         elif m.exp(-(dif_dist)/(t_i)) > r.random():
             # Se copia el valor en el arreglo que se entregara al final, en conjunto de la distancia calculada.
             sol = mod_arr.copy()
             dist_ori = pos_dist
-            print(Fore.RED + f"Solución Criterio B: {dist_ori}") 
+            print(f"Solución Criterio B: {dist_ori}") 
         # Se disminuye la temperatura actual utilizando el parámetro alfa
         t_i *= alpha
     return sol
@@ -152,6 +151,6 @@ solucion = solucionInicial(n)
 # Se llama a la función para realizar el Simulated Annealing
 solucion = simulated_annealing(n, f_size, f_weight, solucion) 
 # Se muestra la mejor solución encontrada
-print(Fore.RESET +f"\nSolucion final: ", solucion)
+print(f"\nSolucion final: ", solucion)
 # Se muestra el resultado de la función objetivo
 print(f"Distancia total final:", total_distance(n, f_size, f_weight, solucion))
