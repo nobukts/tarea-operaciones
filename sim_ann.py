@@ -57,15 +57,23 @@ def total_distance(n, f_size, f_weight, sol):
     sol: Arreglo con el orden de las instalaciones.
     return: Distancia total recorrida por los clientes.
     """
+    #Total de la distancia recorrida por los clientes
     total = 0.0
+    #Se crea la variable para calcular la distancia entre los puestos
     middle_distance = 0.0
 
+    #Se realiza una sumatoria desde la primera instalación hasta la penultima
     for i in range(n - 1):
+        #Guarda la posición que tiene la primera instalación en el arreglo de tamaños y pesos
         p1 = sol[i]
         middle_distance = 0.0
+        #Se realiza una sumatoria desde la siguiente instalación de la posicion i hasta la última instalación
         for j in range(i + 1, n):
+            #Guarda la posición que tiene la segunda instalación en el arreglo de tamaños y pesos
             p2 = sol[j]
+            #Se suma al total la distancia entre los puestos p1 y p2, multiplicado por la cantidad de clientes que prefieren comprar en los puestos p1 y p2
             total += ( (f_size[p1] / 2 + middle_distance + f_size[p2] / 2) * (f_weight[p1][p2]) )
+            #Se va sumando el tamaño que tienen los puestos entremedio
             middle_distance += f_size[p2]
 
     return total
@@ -76,9 +84,14 @@ def solucionInicial(n):
     n: Número de instalaciones.
     return: Arreglo con el orden de las instalaciones aleatorizadas.
     """
+    #Se crea un arreglo para guardar la solucion inicial
     arreglo = []
+
+    #Se utiliza un for para llenar el arreglo con las instalaciones
     for i in range(0,n):
         arreglo.append(i)
+    
+    #Utilizando sample, se ordena el arreglo de instalaciones de forma aleatoria
     solucion = r.sample(arreglo, n)
     return solucion
 
@@ -147,7 +160,7 @@ n, f_size, f_weight = read_srflp(file_name)
 print_instance(n, f_size, f_weight)
 print("\n===========================\n")
 # Solución generada de forma aleatoria uniforme
-solucion = solucionInicial(n)  
+solucion = solucionInicial(n)
 # Se llama a la función para realizar el Simulated Annealing
 solucion = simulated_annealing(n, f_size, f_weight, solucion) 
 # Se muestra la mejor solución encontrada
